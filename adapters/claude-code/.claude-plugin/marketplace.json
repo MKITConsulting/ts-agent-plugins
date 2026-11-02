@@ -1,0 +1,14 @@
+{
+  "name": "timesheetly",
+  "owner": { "name": "Timesheetly" },
+  "metadata": {
+    "description": "Claude Code integration for local Timesheetly activity recording and time reports."
+  },
+  "plugins": [
+    {
+      "name": "timesheetly",
+      "source": "./",
+      "description": "Local activity recording and time reports with Timesheetly Desktop."
+    }
+  ]
+}

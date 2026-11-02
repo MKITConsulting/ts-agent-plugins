@@ -1,0 +1,19 @@
+{
+  "name": "timesheetly",
+  "version": "0.1.0",
+  "description": "Record completed activities and review tracked time through the local Timesheetly Desktop MCP binary.",
+  "author": { "name": "Timesheetly" },
+  "homepage": "https://www.timesheetly.ai",
+  "repository": "https://github.com/MKITConsulting/ts-agent-plugins",
+  "license": "UNLICENSED",
+  "keywords": ["timesheetly", "time-tracking", "local", "mcp"],
+  "userConfig": {
+    "mcp_binary": {
+      "type": "file",
+      "title": "Timesheetly MCP binary",
+      "description": "Absolute path to the local timesheetly-mcp executable (timesheetly-mcp.exe on Windows). Use a binary compatible with your installed Timesheetly Desktop version.",
+      "required": true,
+      "default": "/Applications/Timesheetly.app/Contents/MacOS/timesheetly-mcp"
+    }
+  }
+}

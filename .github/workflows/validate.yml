@@ -1,0 +1,33 @@
+name: Validate plugins
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  claude-code:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install the validated Claude CLI version
+        run: npm install --global @anthropic-ai/claude-code@2.1.316
+      - name: Validate marketplace
+        run: claude plugin validate --strict .
+      - name: Validate Claude Code adapter
+        run: claude plugin validate --strict adapters/claude-code
+      - name: Validate skills
+        run: claude plugin validate --strict adapters/claude-code/skills
+      - name: Validate commands
+        run: claude plugin validate --strict adapters/claude-code/commands
+      - name: Check integration harness syntax
+        run: node --check adapters/claude-code/tests/mcp-integration.test.mjs

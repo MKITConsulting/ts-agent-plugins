@@ -1,0 +1,16 @@
+{
+  "name": "timesheetly",
+  "owner": {
+    "name": "Timesheetly"
+  },
+  "metadata": {
+    "description": "Timesheetly agent integrations using the local Desktop MCP binary."
+  },
+  "plugins": [
+    {
+      "name": "timesheetly",
+      "source": "./adapters/claude-code",
+      "description": "Local activity recording and time reports with Timesheetly Desktop."
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "timesheetly": {
+      "type": "stdio",
+      "command": "${user_config.mcp_binary}",
+      "args": []
+    }
+  }
+}
