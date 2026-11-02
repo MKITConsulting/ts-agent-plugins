@@ -6,4 +6,4 @@ disable-model-invocation: true
 
 Record the completed activity requested in $ARGUMENTS.
 
-Read `${CLAUDE_PLUGIN_ROOT}/skills/timesheetly/SKILL.md` and its `references/recording.md`, then follow that workflow. Resolve the project and missing date/time details before calling `create_source_events`. Preserve the same client reference on retry and report the actual saved/already-present/skipped result. This command saves a manual activity for later aggregation, not a final time entry.
+Read `${CLAUDE_PLUGIN_ROOT}/skills/timesheetly/SKILL.md`, `references/semantics.md` and `references/recording.md`, then follow that workflow. Resolve the project and missing date/time details before calling `create_source_events`. Preserve the same client reference on retry and report the actual saved/already-present/skipped result. This command saves a manual activity for later aggregation. Always state that this action created no time entry and consumed no budget. A request to book or bill time against a customer, purchase order or budget requires explaining this limit and asking before substituting an activity.
