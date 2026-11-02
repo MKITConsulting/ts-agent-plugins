@@ -1,5 +1,7 @@
 # Read projects and time
 
+Read [semantics.md](semantics.md). Label totals from time-entry tools as booked/tracked time. Activity evidence is a separate view and never increases those totals or consumes a budget by itself.
+
 ## Projects
 
 Use `get_active_projects` for selectable projects and `get_current_project` for the desktop selection. Use `get_all_projects` or `get_archived_projects` only when requested. Show names and IDs; do not create projects. Results are scoped to the desktop's active organization.
@@ -21,6 +23,8 @@ Paged results have `{ items, total_count, limit, offset }`. Remember the first p
 The server returns entries overlapping the date range, including entries that began earlier. Group completed work entries by project and sum their actual timestamp durations. Exclude `entry_type: "absence"` from work totals, show absences separately, and keep running entries outside completed totals. Clip intervals to the requested local-date range, using timezone-aware boundaries (a day can have 23 or 25 hours). An entry ending exactly at the range's start contributes zero minutes. Do not calculate by subtracting wall-clock strings or assuming a fixed UTC offset. If reliable timezone conversion is unavailable, show the returned intervals and explain that a precise boundary-adjusted total cannot be supplied.
 
 Mention overlaps as possible double-counting; do not silently merge or alter entries. For a one-day report, prefer `get_todays_summary` when it covers that day. Use `get_project_budget_status` or `get_revenue_summary` only for requested budget/revenue questions; do not invent rates or treat all tracked time as billable.
+
+For budget questions, use the budget tool's returned values and distinguish a project's time budget from purchase-order and revenue information. Non-billable work can contribute to project budget usage. A newly created source event changes none of these figures by itself. If the user asks why recording an activity did not change their booked total, explain the review/aggregation/save step in Timesheetly; never repeat the activity write as a remedy.
 
 ## Activities are a separate view
 

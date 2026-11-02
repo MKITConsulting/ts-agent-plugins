@@ -14,19 +14,21 @@ In Claude Code:
 
 Timesheetly Desktop and its compatible MCP binary must already be installed on the device. This plugin package does not include the binary.
 
+On macOS use **Desktop 0.16.2 or newer** from the [official download page](https://www.timesheetly.ai/en/download). Keep the complete app bundle installed: its launcher depends on the signed, notarized helper inside it. See also the [website installation guide](https://www.timesheetly.ai/en/mcp#claude-code-plugin).
+
 ## Install from a local directory
 
 In Claude Code, add the directory containing this README as a marketplace:
 
 ```text
-/plugin marketplace add /absolute/path/to/ts-claude-plugin
+/plugin marketplace add /absolute/path/to/ts-agent-plugins/adapters/claude-code
 /plugin install timesheetly@timesheetly
 /plugin configure timesheetly@timesheetly
 ```
 
-Set **Timesheetly MCP binary** to the absolute executable path. The default is `/Applications/Timesheetly.app/Contents/MacOS/timesheetly-mcp`. A standalone build can live elsewhere; select its absolute path. Paths containing spaces are supported without embedding additional shell quotes in the saved value.
+Set **Timesheetly MCP binary** to the absolute executable path. The default is `/Applications/Timesheetly.app/Contents/MacOS/timesheetly-mcp`. Developer builds can live elsewhere, but moving an inner executable out of a signed macOS bundle is not a supported installation method. Paths containing spaces are supported without embedding additional shell quotes in the saved value.
 
-Use `/mcp` to inspect or reconnect the server. For development you can also start a new session with `claude --plugin-dir /absolute/path/to/ts-claude-plugin`. The public marketplace is [MKITConsulting/ts-agent-plugins](https://github.com/MKITConsulting/ts-agent-plugins).
+Use `/mcp` to inspect or reconnect the server. For development you can also start a new session with `claude --plugin-dir /absolute/path/to/ts-agent-plugins/adapters/claude-code`. The public marketplace is [MKITConsulting/ts-agent-plugins](https://github.com/MKITConsulting/ts-agent-plugins).
 
 Use a current Claude Code version that supports plugin `userConfig`. Native manifest validation is tested with 2.1.316. This is a local Claude Code integration; a cloud-only host cannot launch a binary on your computer.
 
@@ -52,16 +54,28 @@ Natural-language requests also activate the Timesheetly skill, for example: “E
 
 `create_source_events` adds manual activities to the timeline, labelled by the app as coming via MCP. They can later be aggregated into time entries in Timesheetly. **An activity is not a final time entry, billable booking, submission or approval.** Activities remain local and do not sync. Existing time entries are queried separately; the plugin never adds activity durations to their totals.
 
+**Source events → review and aggregation in Timesheetly → saved time entries → applicable budget/billing calculations.**
+
+A source event describes what happened. Even with a project and a 90-minute interval, it does not consume a project or purchase-order budget. A time entry records booked working time; completed work entries contribute to project budget usage under that budget's rules. Billable status, purchase orders and rates govern billing separately. Non-billable work can still count toward a project's time budget. Saving an entry does not mean it was invoiced, submitted or approved.
+
+After `/timesheetly:log`, expect **“Activity recorded — no time entry created; no budget consumed by this action.”** The activity appears in the Manual timeline lane. Review its date, duration and project in the desktop app, aggregate it with the relevant other events, review the proposed entries and save them. The MCP cannot perform that step. Several events can describe overlapping work; their durations must not be summed as booked time. `/timesheetly:status` and `/timesheetly:week` query time entries, so their totals may remain unchanged after an activity was recorded.
+
+For “book this to the customer/order/budget”, the assistant must explain that it cannot create that booking and ask before substituting an activity. See the packaged [terminology and response rules](skills/timesheetly/references/semantics.md).
+
 The current server does not expose timer start/stop/pause, direct time-entry creation/editing/deletion, aggregation, submission or file export. Overnight intervals cannot be recorded losslessly by the current same-day activity API. Use the desktop app for those operations.
 
 The plugin does not automatically record coding sessions, install session hooks, download a binary, or read SQLite/keychain data itself. MCP data access is local, but requested tool results enter the AI conversation and are processed under the host's data-handling settings.
+
+## macOS: immediate exit or untrusted-program warning
+
+For Exit 137/SIGKILL or a Gatekeeper warning, first install the official Desktop **0.16.2 or newer**, open the app once, check the configured launcher path and reconnect in `/mcp`. 0.16.2 fixes the known MCP helper packaging/notarization issue, although Exit 137 can have other causes. Keep the entire app bundle; do not copy its inner helper executable, disable Gatekeeper or remove quarantine attributes. If the current release still fails, collect the macOS/Desktop versions and the client's MCP error for support.
 
 ## Verify development changes
 
 Validate the installable package with the real Claude CLI:
 
 ```bash
-claude plugin validate --strict /absolute/path/to/ts-claude-plugin
+claude plugin validate --strict /absolute/path/to/ts-agent-plugins/adapters/claude-code
 ```
 
 Run the real-binary integration tests with Node.js 22+ and SQLCipher available on PATH, and with matching desktop migrations:
