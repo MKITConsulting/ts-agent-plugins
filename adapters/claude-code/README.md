@@ -16,6 +16,10 @@ Timesheetly Desktop and its compatible MCP binary must already be installed on t
 
 On macOS use **Desktop 0.16.2 or newer** from the [official download page](https://www.timesheetly.ai/en/download). Keep the complete app bundle installed: its launcher depends on the signed, notarized helper inside it. See also the [website installation guide](https://www.timesheetly.ai/en/mcp#claude-code-plugin).
 
+On Windows (x64), use the **MSI installer for Desktop 0.16.4 or newer**. Open Timesheetly once, sign in and select your account profile and organization. Run Claude Code as the same Windows user so the server can access the encrypted database key. Configure **Timesheetly MCP binary** as `C:\Program Files\Timesheetly\timesheetly-mcp.exe`, or adjust it to your chosen installation directory.
+
+The MCP executable extracted from the Windows 0.16.4 MSI passed six native tests for encrypted database access, Windows key storage and activity recording. This verifies the packaged server; a full Claude Code plugin conversation on Windows and native Linux execution remain untested. The full plugin workflow has been tested on macOS.
+
 ## Install from a local directory
 
 In Claude Code, add the directory containing this README as a marketplace:
