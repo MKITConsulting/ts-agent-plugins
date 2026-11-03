@@ -24,7 +24,15 @@ Set **Timesheetly MCP binary** to its absolute path on that device. On macOS the
 /Applications/Timesheetly.app/Contents/MacOS/timesheetly-mcp
 ```
 
-For a standalone build or Windows, select the matching executable's actual location (`timesheetly-mcp.exe` on Windows). The plugin does not include or download the Desktop app or binary. Native execution has been tested on macOS; Windows/Linux packaging has not been validated.
+On Windows (x64), use the **MSI installer for Timesheetly Desktop 0.16.4 or newer** from the [official download page](https://www.timesheetly.ai/en/download). Open the app once, sign in and select your account profile and organization. Run Claude Code as the same Windows user so the MCP server can access the encrypted database key. The default MSI installation path is:
+
+```text
+C:\Program Files\Timesheetly\timesheetly-mcp.exe
+```
+
+If you chose another installation directory or use a standalone build, configure the executable's actual absolute path. The plugin does not include or download the Desktop app or binary.
+
+The Claude Code plugin workflow has been tested on macOS. The MCP executable extracted from the Windows 0.16.4 MSI passed six native tests covering encrypted database access, Windows key storage and activity recording. A full Claude Code plugin conversation on Windows and native Linux execution have not yet been validated.
 
 Enable **Settings → Network → MCP access → Allow MCP clients to create events** in Timesheetly for recording. Read-only queries do not need this switch. Use `/mcp` to check the connection, then try:
 
